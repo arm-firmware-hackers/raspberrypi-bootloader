@@ -23,7 +23,10 @@ jobs:
           sudo apt-get install -y build-essential gcc-aarch64-linux-gnu
 
       - name: Build für Raspberry Pi 5 starten
-        run: make rpi5
+        run: 
+          chmod +x build_boot.sh
+          chmod +x Makefile
+          sudo make rpi5
 
       - name: boot.vfat verpacken
         run: |

@@ -1,17 +1,7 @@
 #!/bin/bash
 set -e
 
-# Falls Argument übergeben wurde (1, 2 oder 3), direkt ausführen:
-if [[ "$1" =~ ^[123]$ ]]; then
-    case $1 in
-        1) build_partition "Raspberry Pi 3" "RPI3" ; continue;;
-        2) build_partition "Raspberry Pi 4" "RPI4" ; continue;;
-        3) build_partition "Raspberry Pi 5" "RPI5" ; continue;;
-    esac
-    exit 0
-fi
-
-
+# Funktion zum Erstellen der Partition
 build_partition() {
     local model=$1
     local src_dir=$2
@@ -19,7 +9,7 @@ build_partition() {
 
     BOOT_FOLDER="$src_dir"  # Hier liegt dein Bootloader-Inhalt
     OUTPUT_IMAGE="$target_image"
-    SIZE_MB=256                         # Größe der Boot-Partition in MB (100MB ist Raspberry-Pi-kompatibel)
+    SIZE_MB=256             # Größe der Boot-Partition in MB
     MOUNTPOINT="/mnt/boot"
     LOOPDEV=""
 
@@ -27,7 +17,7 @@ build_partition() {
     if [ ! -d "$BOOT_FOLDER" ]; then
         echo "❌ Ordner '$BOOT_FOLDER' existiert nicht!"
         exit 1
-fi
+    fi
 
     # Existierende boot.vfat entfernen
     rm -f "$OUTPUT_IMAGE"
@@ -57,33 +47,17 @@ fi
     sudo umount "$MOUNTPOINT"
     sudo losetup -d "$LOOPDEV"
 
-    echo "✅ boot.vfat erfolgreich für $modelerstellt!"
+    echo "✅ boot.vfat erfolgreich für $model erstellt!"
 }
 
-
-
-# Hauptmenü mit Dialog
-menu=$(dialog --title "Raspberry Pi - Bootloader" \
-              --menu "Wählen Sie eine Option aus:" \
-              15 50 3 \
-              1 "Build Raspberry Pi 3 Bootloader" \
-              2 "Build Raspberry Pi 4 Bootloader" \
-              3 "Build Raspberry Pi 5 Bootloader" \
-              2>&1 >/dev/tty)
-
-# Je nach Auswahl entsprechende Aktion durchführen
-case $menu in
-    1)
-        build_partition "Raspberry Pi 3" "RPI3"
-        ;;
-    2)
-        build_partition "Raspberry Pi 4" "RPI4"
-        ;;
-    3)
-        build_partition "Raspberry Pi 5" "RPI5"
-        ;;
-    *)
-        echo "Ungültige Auswahl."
-        exit 1
-        ;;
-esac
+# Skript erwartet Argument: Modellnummer (1 für rpi3, 2 für rpi4, 3 für rpi5)
+if [[ "$1" =~ ^[123]$ ]]; then
+    case $1 in
+        1) build_partition "Raspberry Pi 3" "RPI3" ;;
+        2) build_partition "Raspberry Pi 4" "RPI4" ;;
+        3) build_partition "Raspberry Pi 5" "RPI5" ;;
+    esac
+else
+    echo "❌ Ungültige Argumentnummer. Benutze 1 für RPI3, 2 für RPI4, oder 3 für RPI5."
+    exit 1
+fi
