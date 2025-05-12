@@ -1,3 +1,4 @@
+#!/bin/bash
 set -e
 
 # Falls Argument übergeben wurde (1, 2 oder 3), direkt ausführen:
