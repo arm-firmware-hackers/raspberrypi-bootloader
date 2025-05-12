@@ -1,0 +1,48 @@
+name: Build Bootloader für Raspberry Pi 5
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggern beim Erstellen eines Tags wie v1.0, v1.1 usw.
+  workflow_dispatch:  # Ermöglicht das manuelle Ausführen der Action
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Schritt 1: Repository auschecken
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Schritt 2: Installiere notwendige Abhängigkeiten
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dosfstools build-essential
+
+      # Schritt 3: Führe das Skript aus, um das Boot-Image zu erstellen
+      - name: Build Boot Image
+        run: |
+          chmod +x ./build_boot.sh
+          ./build_boot.sh 3  # Der Parameter 3 bedeutet Raspberry Pi 5
+
+      # Schritt 4: Komprimiere das Boot-Image
+      - name: Compress boot.vfat
+        run: |
+          tar -czf boot.vfat.tar.gz boot.vfat
+
+      # Schritt 5: Erstelle ein Release und lade die tar.gz hoch
+      - name: Create Release
+        uses: gh workflows create-release@v1
+        with:
+          tag_name: v1.0  # Ersetze dies mit der gewünschten Version (kann auch dynamisch sein)
+          release_name: "Raspberry Pi 5 Bootloader v1.0"
+          body: "Automatisches Build des Bootloaders für Raspberry Pi 5"
+      
+      - name: Upload bootloader tar.gz to release
+        uses: gh actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: boot.vfat.tar.gz
+          asset_name: boot.vfat.tar.gz
+          asset_content_type: application/gzip
