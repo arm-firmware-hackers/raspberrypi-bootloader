@@ -1,22 +1,17 @@
-# Standardziel
-.PHONY: all
-all:
-	@echo "Bitte ein Ziel angeben: rpi3, rpi4 oder rpi5"
+# Variablen definieren
+BUILD_SCRIPT = ./build_boot.sh
 
-# Bootloader-Build-Ziel für Raspberry Pi 3
-.PHONY: rpi3
+# Default Target
+all: rpi3 rpi4 rpi5
+
+# Ziel für Raspberry Pi 3
 rpi3:
-	@echo "🔧 Erstelle Boot-Image für Raspberry Pi 3..."
-	./build_boot.sh 1
+	$(BUILD_SCRIPT) 1
 
-# Bootloader-Build-Ziel für Raspberry Pi 4
-.PHONY: rpi4
+# Ziel für Raspberry Pi 4
 rpi4:
-	@echo "🔧 Erstelle Boot-Image für Raspberry Pi 4..."
-	./build_boot.sh 2
+	$(BUILD_SCRIPT) 2
 
-# Bootloader-Build-Ziel für Raspberry Pi 5
-.PHONY: rpi5
+# Ziel für Raspberry Pi 5
 rpi5:
-	@echo "🔧 Erstelle Boot-Image für Raspberry Pi 5..."
-	./build_boot.sh 3
+	$(BUILD_SCRIPT) 3
