@@ -1,0 +1,46 @@
+# Raspberry Pi 5 Configuration
+
+# ARM64 Mode (64-bit)
+arm_64bit=1
+
+# Set the GPU memory split (this can be adjusted depending on your needs)
+gpu_mem=64
+
+# Enable the camera (if you have a Raspberry Pi camera module)
+start_x=1
+
+# Enable audio output
+dtparam=audio=on
+
+# Enable 3D acceleration
+dtoverlay=vc4-kms-v3d
+
+# Set display resolution (adjust as needed for your display)
+hdmi_group=1
+hdmi_mode=16
+
+# Enable the serial interface (useful for debugging)
+enable_uart=1
+
+# Disable Bluetooth (if not needed, to save resources)
+dtoverlay=pi3-disable-bt
+
+# Set the maximum ARM frequency (optional for performance tuning)
+arm_freq=2000
+
+# Enable Wi-Fi (if you need Wi-Fi on Raspberry Pi 5)
+# For some models, this may not be necessary if Wi-Fi is already enabled by default
+dtoverlay=pi3-disable-wifi
+
+# Kernel logging level (optional, for debugging purposes)
+# Uncomment the line below to enable more verbose logging
+# printk=4
+
+
+# Enables Auto - Initramfs 
+auto_initramfs=0
+# initramfs initramfs.cpio.gz followkernel
+
+# Kernel Config
+kernel=kernel8.img
+# kernel=Image
