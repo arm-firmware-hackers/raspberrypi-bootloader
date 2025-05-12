@@ -4,9 +4,9 @@ set -e
 # Falls Argument übergeben wurde (1, 2 oder 3), direkt ausführen:
 if [[ "$1" =~ ^[123]$ ]]; then
     case $1 in
-        1) build_partition "Raspberry Pi 3" "RPI3" ;;
-        2) build_partition "Raspberry Pi 4" "RPI4" ;;
-        3) build_partition "Raspberry Pi 5" "RPI5" ;;
+        1) build_partition "Raspberry Pi 3" "RPI3" ; continue;;
+        2) build_partition "Raspberry Pi 4" "RPI4" ; continue;;
+        3) build_partition "Raspberry Pi 5" "RPI5" ; continue;;
     esac
     exit 0
 fi
